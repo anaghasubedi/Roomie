@@ -89,10 +89,13 @@ class _CreateHomeScreenState extends State<CreateHomeScreen> {
   }
 
   void _onContinue() {
-    //navigate
+    // todo: navigate to next screen
   }
 }
 
+// ---------------------------------------------------------------------------
+// Text input styled to match the Roomie design system
+// ---------------------------------------------------------------------------
 class _RoomieTextField extends StatelessWidget {
   const _RoomieTextField({
     required this.controller,
