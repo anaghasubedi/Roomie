@@ -93,9 +93,6 @@ class _CreateHomeScreenState extends State<CreateHomeScreen> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Text input styled to match the Roomie design system
-// ---------------------------------------------------------------------------
 class _RoomieTextField extends StatelessWidget {
   const _RoomieTextField({
     required this.controller,
@@ -143,9 +140,6 @@ class _RoomieTextField extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Room counter:  −  3  +
-// ---------------------------------------------------------------------------
 class _RoomCounter extends StatelessWidget {
   const _RoomCounter({
     required this.count,
