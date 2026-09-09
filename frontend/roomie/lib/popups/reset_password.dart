@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 import '../widgets/logo_mark.dart';
 import '../widgets/field_labels.dart';
 import '../widgets/primary_button.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
+class ResetPasswordDialog extends StatefulWidget {
   final String email;
 
-  const ResetPasswordScreen({super.key, required this.email});
+  const ResetPasswordDialog({super.key, required this.email});
+
+  /// Shows the reset-password flow as a centered popup.
+  ///
+  /// Usage: `ResetPasswordDialog.show(context, email: email);`
+  static Future<void> show(BuildContext context, {required String email}) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => ResetPasswordDialog(email: email),
+    );
+  }
 
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  State<ResetPasswordDialog> createState() => _ResetPasswordDialogState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
@@ -43,24 +55,27 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _goToLogin() {
-    // Pop all the way back to AuthScreen
+    // Close this dialog and pop back to the first route (AuthScreen)
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Dialog(
       backgroundColor: RColors.bg,
-      appBar: AppBar(
-        backgroundColor: RColors.bg,
-        elevation: 0,
-        // No back button — user must use the action below
-        automaticallyImplyLeading: false,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: _isSuccess ? _buildSuccess() : _buildForm(),
+      // No leading/back affordance — user must use the action button below,
+      // matching the original screen's automaticallyImplyLeading: false.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 28, 28, 32),
+            child: _isSuccess ? _buildSuccess() : _buildForm(),
+          ),
         ),
       ),
     );
@@ -68,14 +83,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Widget _buildForm() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 16),
         const Logo(),
         const SizedBox(height: 28),
-        const Text(
+        Text(
           'Reset Password',
-          style: TextStyle(
+          style: RFonts.heading(
             fontSize: 24,
             fontWeight: FontWeight.w600,
             color: RColors.text,
@@ -83,10 +98,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
+        Text(
           'Choose a new password for your account',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: RFonts.body(
             fontSize: 13,
             fontWeight: FontWeight.w300,
             color: RColors.primaryMid,
@@ -104,7 +119,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               TextFormField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                style: const TextStyle(fontSize: 13, color: RColors.text),
+                style: RFonts.body(fontSize: 13, color: RColors.text),
                 decoration: RoomieDecor.of('create a password').copyWith(
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -130,7 +145,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               TextFormField(
                 controller: _confirmController,
                 obscureText: _obscureConfirm,
-                style: const TextStyle(fontSize: 13, color: RColors.text),
+                style: RFonts.body(fontSize: 13, color: RColors.text),
                 decoration: RoomieDecor.of('repeat your password').copyWith(
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -145,7 +160,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                 ),
                 validator: (v) {
-                  if (v == null || v.isEmpty) return 'please confirm your password';
+                  if (v == null || v.isEmpty) {
+                    return 'please confirm your password';
+                  }
                   if (v != _passwordController.text) {
                     return 'passwords do not match';
                   }
@@ -167,13 +184,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Widget _buildSuccess() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           width: 64,
           height: 64,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: RColors.primaryLight,
             shape: BoxShape.circle,
           ),
@@ -184,9 +202,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        const Text(
+        Text(
           'password updated!',
-          style: TextStyle(
+          style: RFonts.heading(
             fontSize: 24,
             fontWeight: FontWeight.w600,
             color: RColors.text,
@@ -194,10 +212,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
+        Text(
           'your password has been reset.\nyou can now log in with your new password.',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: RFonts.body(
             fontSize: 13,
             fontWeight: FontWeight.w300,
             color: RColors.primaryMid,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 import '../widgets/logo_mark.dart';
 import '../widgets/otp_input.dart';
 import '../widgets/resend_text.dart';
@@ -17,23 +18,38 @@ enum VerificationMode {
   resetPassword,
 }
 
-class VerificationScreen extends StatefulWidget {
+class VerificationDialog extends StatefulWidget {
   final String email;
 
   /// Defaults to [VerificationMode.emailVerification].
   final VerificationMode mode;
 
-  const VerificationScreen({
+  const VerificationDialog({
     super.key,
     required this.email,
     this.mode = VerificationMode.emailVerification,
   });
 
+  /// Shows the verification flow as a centered popup.
+  ///
+  /// Usage: `VerificationDialog.show(context, email: email);`
+  static Future<void> show(
+    BuildContext context, {
+    required String email,
+    VerificationMode mode = VerificationMode.emailVerification,
+  }) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => VerificationDialog(email: email, mode: mode),
+    );
+  }
+
   @override
-  State<VerificationScreen> createState() => _VerificationScreenState();
+  State<VerificationDialog> createState() => _VerificationDialogState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _VerificationDialogState extends State<VerificationDialog> {
   static const int _codeLength = 6;
 
   final List<TextEditingController> _controllers = List.generate(
@@ -167,14 +183,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void _onSuccess() {
     switch (widget.mode) {
       case VerificationMode.resetPassword:
-        // Replace this screen so back doesn't return to OTP
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => ResetPasswordScreen(email: widget.email),
-          ),
-        );
+        // Close this popup first, then open the next one.
+        Navigator.of(context).pop();
+        ResetPasswordDialog.show(context, email: widget.email);
       case VerificationMode.emailVerification:
-        // todo: navigate to HomeSetupScreen
+        // todo: pop and navigate to HomeSetupScreen
+        Navigator.of(context).pop();
         break;
     }
   }
@@ -187,62 +201,67 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Dialog(
       backgroundColor: RColors.bg,
-      appBar: AppBar(
-        backgroundColor: RColors.bg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: RColors.text,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 16),
-              const Logo(),
-              const SizedBox(height: 28),
-              Text(
-                _title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: RColors.text,
-                  letterSpacing: -0.3,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 16, 28, 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 18,
+                      color: RColors.text,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              VerificationSubtitle(email: widget.email),
-              const SizedBox(height: 40),
-              OtpInput(
-                controllers: _controllers,
-                focusNodes: _focusNodes,
-                hasError: _hasError,
-                onChanged: _onChanged,
-                onKeyEvent: _onKeyEvent,
-              ),
-              const SizedBox(height: 32),
-              PrimaryButton(
-                label: 'verify →',
-                isLoading: _isLoading,
-                onPressed: _isCodeComplete() ? _handleVerify : null,
-              ),
-              const SizedBox(height: 24),
-              ResendText(
-                canResend: _canResend,
-                countdown: _resendCountdown,
-                onResend: _onResend,
-              ),
-              const SizedBox(height: 48),
-            ],
+                const Logo(),
+                const SizedBox(height: 20),
+                Text(
+                  _title,
+                  style: RFonts.heading(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: RColors.text,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                VerificationSubtitle(email: widget.email),
+                const SizedBox(height: 32),
+                OtpInput(
+                  controllers: _controllers,
+                  focusNodes: _focusNodes,
+                  hasError: _hasError,
+                  onChanged: _onChanged,
+                  onKeyEvent: _onKeyEvent,
+                ),
+                const SizedBox(height: 28),
+                PrimaryButton(
+                  label: 'verify →',
+                  isLoading: _isLoading,
+                  onPressed: _isCodeComplete() ? _handleVerify : null,
+                ),
+                const SizedBox(height: 20),
+                ResendText(
+                  canResend: _canResend,
+                  countdown: _resendCountdown,
+                  onResend: _onResend,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 import 'field_labels.dart';
 
 class DobTextField extends StatefulWidget {
@@ -66,7 +67,7 @@ class _DobTextFieldState extends State<DobTextField> {
       if (d != null && m != null && y != null) {
         try {
           final date = DateTime(y, m, d);
-          if (date.day == d && date.month == m) {
+          if (date.day == d && date.month == m && date.year == y) {
             widget.onChanged(date);
             return;
           }
@@ -95,12 +96,12 @@ class _DobTextFieldState extends State<DobTextField> {
           keyboardType: TextInputType.number,
           inputFormatters: [_DobInputFormatter()],
           onChanged: _onChanged,
-          style: const TextStyle(fontSize: 13, color: RColors.text),
+          style: RFonts.body(fontSize: 13, color: RColors.text),
           decoration: InputDecoration(
             hintText: 'DD / MM / YYYY',
-            hintStyle: const TextStyle(fontSize: 13, color: RColors.hint),
+            hintStyle: RFonts.body(fontSize: 13, color: RColors.hint),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: RColors.surface,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             suffixIcon: GestureDetector(
@@ -130,10 +131,6 @@ class _DobTextFieldState extends State<DobTextField> {
                 color: widget.hasError ? RColors.error : RColors.primary,
                 width: 1.5,
               ),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: borderColor, width: borderWidth),
             ),
           ),
         ),

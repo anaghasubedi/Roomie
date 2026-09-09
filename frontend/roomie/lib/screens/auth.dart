@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 import '../widgets/headers.dart';
 import '../widgets/auth_tabs.dart';
 import '../widgets/field_labels.dart';
@@ -7,9 +8,10 @@ import '../widgets/primary_button.dart';
 import '../widgets/or_divider.dart';
 import '../widgets/social_buttons.dart';
 import '../widgets/terms_text.dart';
+import '../widgets/text_field.dart';
 import '../services/auth_services.dart';
-import 'verification.dart';
-import 'forgot_password.dart';
+import '../popups/verification.dart';
+import '../popups/forgot_password.dart';
 import '../widgets/error_banner.dart';
 import '../widgets/dob_picker.dart';
 import 'welcome.dart';
@@ -146,13 +148,10 @@ class _AuthScreenState extends State<AuthScreen> {
     if (error != null) {
       setState(() => _signupError = error);
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => VerificationScreen(
-            email: _signupEmailController.text.trim(),
-            mode: VerificationMode.emailVerification,
-          ),
-        ),
+      VerificationDialog.show(
+        context,
+        email: _signupEmailController.text.trim(),
+        mode: VerificationMode.emailVerification,
       );
     }
   }
@@ -181,7 +180,7 @@ class _AuthScreenState extends State<AuthScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(fontSize: 13, color: Colors.white),
+          style: RFonts.body(fontSize: 13, color: RColors.buttonText),
         ),
         backgroundColor: RColors.error,
         behavior: SnackBarBehavior.floating,
@@ -224,43 +223,42 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldLabel('email'),
+          const FieldLabel('Email'),
           const SizedBox(height: 6),
-          TextFormField(
+          RoomieTextField(
             controller: _loginEmailController,
+            hint: 'you@email.com',
+            focusedHint: 'binayak11@gmail.com',
             keyboardType: TextInputType.emailAddress,
-            style: const TextStyle(fontSize: 13, color: RColors.text),
-            decoration: RoomieDecor.of('you@email.com'),
             validator: (v) {
-              if (v == null || v.isEmpty) return 'email is required';
-              if (!v.contains('@')) return 'enter a valid email';
+              if (v == null || v.isEmpty) return 'Email is required';
+              if (!v.contains('@')) return 'Enter a valid email';
               return null;
             },
           ),
           const SizedBox(height: 14),
 
-          const FieldLabel('password'),
+          const FieldLabel('Password'),
           const SizedBox(height: 6),
-          TextFormField(
+          RoomieTextField(
             controller: _loginPasswordController,
+            hint: 'Enter your Password',
+            focusedHint: '********',
             obscureText: _obscureLoginPassword,
-            style: const TextStyle(fontSize: 13, color: RColors.text),
-            decoration: RoomieDecor.of('••••••••').copyWith(
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureLoginPassword
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  size: 18,
-                  color: RColors.primaryMid,
-                ),
-                onPressed: () => setState(
-                  () => _obscureLoginPassword = !_obscureLoginPassword,
-                ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscureLoginPassword
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                size: 18,
+                color: RColors.primaryMid,
+              ),
+              onPressed: () => setState(
+                () => _obscureLoginPassword = !_obscureLoginPassword,
               ),
             ),
             validator: (v) {
-              if (v == null || v.isEmpty) return 'password is required';
+              if (v == null || v.isEmpty) return 'Password is Required';
               return null;
             },
           ),
@@ -275,19 +273,17 @@ class _AuthScreenState extends State<AuthScreen> {
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
-              ),
-              child: const Text(
-                'forgot password?',
-                style: TextStyle(fontSize: 12, color: RColors.primaryMid),
+              onTap: () => ForgotPasswordDialog.show(context),
+              child: Text(
+                'Forgot Password?',
+                style: RFonts.body(fontSize: 12, color: RColors.primaryMid),
               ),
             ),
           ),
           const SizedBox(height: 20),
 
           PrimaryButton(
-            label: 'log in →',
+            label: 'Log In →',
             isLoading: _isLoginLoading,
             onPressed: _handleLogin,
           ),
@@ -305,17 +301,17 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldLabel('display name'),
+          const FieldLabel('Display Name'),
           const SizedBox(height: 6),
-          TextFormField(
+          RoomieTextField(
             controller: _displayNameController,
-            style: const TextStyle(fontSize: 13, color: RColors.text),
-            decoration: RoomieDecor.of('your name'),
+            hint: 'Your Name',
+            focusedHint: 'Saurab Neupane',
             validator: (v) {
               if (v == null || v.trim().isEmpty) {
-                return 'display name is required';
+                return 'Display name is required';
               }
-              if (v.trim().length < 2) return 'must be at least 2 characters';
+              if (v.trim().length < 3) return 'Nust be at least 3 characters';
               return null;
             },
           ),
@@ -331,44 +327,43 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           const SizedBox(height: 14),
 
-          const FieldLabel('email'),
+          const FieldLabel('Email'),
           const SizedBox(height: 6),
-          TextFormField(
+          RoomieTextField(
             controller: _signupEmailController,
+            hint: 'you@email.com',
+            focusedHint: 'saurab@email.com',
             keyboardType: TextInputType.emailAddress,
-            style: const TextStyle(fontSize: 13, color: RColors.text),
-            decoration: RoomieDecor.of('you@email.com'),
             validator: (v) {
-              if (v == null || v.isEmpty) return 'email is required';
-              if (!v.contains('@')) return 'enter a valid email';
+              if (v == null || v.isEmpty) return 'Email is required';
+              if (!v.contains('@')) return 'Enter a valid email';
               return null;
             },
           ),
           const SizedBox(height: 14),
 
-          const FieldLabel('password'),
+          const FieldLabel('Password'),
           const SizedBox(height: 6),
-          TextFormField(
+          RoomieTextField(
             controller: _signupPasswordController,
+            hint: 'Create a password',
+            focusedHint: '********',
             obscureText: _obscureSignupPassword,
-            style: const TextStyle(fontSize: 13, color: RColors.text),
-            decoration: RoomieDecor.of('create a password').copyWith(
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureSignupPassword
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  size: 18,
-                  color: RColors.primaryMid,
-                ),
-                onPressed: () => setState(
-                  () => _obscureSignupPassword = !_obscureSignupPassword,
-                ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscureSignupPassword
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                size: 18,
+                color: RColors.primaryMid,
+              ),
+              onPressed: () => setState(
+                () => _obscureSignupPassword = !_obscureSignupPassword,
               ),
             ),
             validator: (v) {
-              if (v == null || v.isEmpty) return 'password is required';
-              if (v.length < 8) return 'must be at least 8 characters';
+              if (v == null || v.isEmpty) return 'Password is required';
+              if (v.length < 8) return 'Must be at least 8 characters';
               return null;
             },
           ),
@@ -380,7 +375,7 @@ class _AuthScreenState extends State<AuthScreen> {
           ],
 
           PrimaryButton(
-            label: 'create account →',
+            label: 'Create Account',
             isLoading: _isSignupLoading,
             onPressed: _handleSignup,
           ),
@@ -410,7 +405,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   const Divider(color: RColors.border, thickness: 0.5),
                   const SizedBox(height: 24),
                   AuthTabs(
-                    activeTab: _isLogin ? 'login' : 'signup',
+                    activeTab: _isLogin ? 'LOGIN' : 'SIGNUP',
                     onInactiveTap: () => _switchTab(!_isLogin),
                   ),
                   const SizedBox(height: 20),

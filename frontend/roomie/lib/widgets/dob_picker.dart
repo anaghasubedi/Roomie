@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 import 'field_error.dart';
 import 'dob_text_field.dart';
 
@@ -28,6 +29,8 @@ class _DobPickerState extends State<DobPicker>
   late final Animation<double> _fade;
   late final Animation<Offset> _slide;
 
+  static final DateTime _earliestDob = DateTime(1900, 1, 1);
+
   @override
   void initState() {
     super.initState();
@@ -53,14 +56,30 @@ class _DobPickerState extends State<DobPicker>
     return DateTime(now.year - widget.minAge, now.month, now.day);
   }
 
+  DateTime get _initialCalendarDate {
+    final selected = widget.selectedDob;
+    if (selected != null && !selected.isAfter(_maxDate)) return selected;
+    return _maxDate;
+  }
+
   void _toggleCal() {
     setState(() => _calOpen = !_calOpen);
     _calOpen ? _anim.forward() : _anim.reverse();
   }
 
+  void _closeCal() {
+    setState(() => _calOpen = false);
+    _anim.reverse();
+  }
+
   void _onTextChanged(DateTime? date) {
     if (date != null && date.isAfter(_maxDate)) return;
     widget.onChanged(date);
+  }
+
+  void _onCalendarDateChanged(DateTime date) {
+    widget.onChanged(date);
+    _closeCal();
   }
 
   int _calcAge(DateTime dob) {
@@ -93,10 +112,7 @@ class _DobPickerState extends State<DobPicker>
           const SizedBox(height: 5),
           Text(
             'age: ${_calcAge(widget.selectedDob!)} years',
-            style: const TextStyle(
-              fontSize: 11,
-              color: RColors.primaryMid,
-            ),
+            style: RFonts.body(fontSize: 11, color: RColors.primaryMid),
           ),
         ],
         if (_calOpen) ...[
@@ -105,6 +121,20 @@ class _DobPickerState extends State<DobPicker>
             opacity: _fade,
             child: SlideTransition(
               position: _slide,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: RColors.surface,
+                  border: Border.all(color: RColors.border),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: CalendarDatePicker(
+                  initialDate: _initialCalendarDate,
+                  firstDate: _earliestDob,
+                  lastDate: _maxDate,
+                  onDateChanged: _onCalendarDateChanged,
+                ),
+              ),
             ),
           ),
         ],
