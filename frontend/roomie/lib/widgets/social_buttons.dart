@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class SocialButtons extends StatelessWidget {
   final VoidCallback onGoogleTap;
@@ -20,7 +21,7 @@ class SocialButtons extends StatelessWidget {
             onTap: onGoogleTap,
           ),
         )
-      ]
+      ],
     );
   }
 }
@@ -43,7 +44,7 @@ class _SocialButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 11),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: RColors.surface,
           border: Border.all(color: RColors.border, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
@@ -54,7 +55,7 @@ class _SocialButton extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: const TextStyle(
+              style: RFonts.emphasis(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: RColors.primary,

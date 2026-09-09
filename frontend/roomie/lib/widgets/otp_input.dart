@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class OtpInput extends StatelessWidget {
   final List<TextEditingController> controllers;
@@ -44,12 +45,12 @@ class OtpInput extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.error_outline_rounded, size: 14, color: RColors.errorText),
-                SizedBox(width: 5),
+              children: [
+                const Icon(Icons.error_outline_rounded, size: 14, color: RColors.error),
+                const SizedBox(width: 5),
                 Text(
                   'invalid code, please try again',
-                  style: TextStyle(fontSize: 12, color: RColors.errorText),
+                  style: RFonts.body(fontSize: 12, color: RColors.error),
                 ),
               ],
             ),
@@ -88,9 +89,9 @@ class _OtpBox extends StatelessWidget {
           focusNode: focusNode,
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
-          maxLength: 6,
+          maxLength: 1,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          style: const TextStyle(
+          style: RFonts.heading(
             fontSize: 22,
             fontWeight: FontWeight.w600,
             color: RColors.text,
@@ -98,7 +99,7 @@ class _OtpBox extends StatelessWidget {
           decoration: InputDecoration(
             counterText: '',
             filled: true,
-            fillColor: focusNode.hasFocus ? RColors.primaryLight : Colors.white,
+            fillColor: focusNode.hasFocus ? RColors.primaryLight : RColors.surface,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(

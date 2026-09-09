@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class OrDivider extends StatelessWidget {
   const OrDivider({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Expanded(
+        const Expanded(
           child: Divider(color: RColors.border, thickness: 0.5),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             'or continue with',
-            style: TextStyle(fontSize: 11, color: RColors.orText),
+            style: RFonts.body(fontSize: 11, color: RColors.orText),
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Divider(color: RColors.border, thickness: 0.5),
         ),
       ],

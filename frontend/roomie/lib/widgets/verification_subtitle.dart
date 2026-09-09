@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class VerificationSubtitle extends StatelessWidget {
   final String email;
@@ -23,7 +24,7 @@ class VerificationSubtitle extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: const TextStyle(
+        style: RFonts.body(
           fontSize: 13,
           fontWeight: FontWeight.w300,
           color: RColors.primaryMid,
@@ -33,7 +34,7 @@ class VerificationSubtitle extends StatelessWidget {
           const TextSpan(text: 'we sent a 6-digit code to\n'),
           TextSpan(
             text: _masked,
-            style: const TextStyle(
+            style: RFonts.body(
               fontWeight: FontWeight.w600,
               color: RColors.text,
             ),

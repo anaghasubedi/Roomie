@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class ResendText extends StatelessWidget {
   final bool canResend;
@@ -19,21 +20,18 @@ class ResendText extends StatelessWidget {
       onTap: canResend ? onResend : null,
       child: RichText(
         text: TextSpan(
-          style: const TextStyle(
+          style: RFonts.body(
             fontSize: 13,
             color: RColors.primaryMid,
           ),
           children: [
             const TextSpan(text: "didn't get it? "),
             TextSpan(
-              text: canResend
-                  ? 'resend code'
-                  : 'resend in ${countdown}s',
-              style: TextStyle(
+              text: canResend ? 'resend code' : 'resend in ${countdown}s',
+              style: RFonts.emphasis(
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: canResend
-                    ? RColors.primary
-                    : RColors.primaryMid,
+                color: canResend ? RColors.primary : RColors.primaryMid,
               ),
             ),
           ],
