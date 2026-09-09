@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class FieldLabel extends StatelessWidget {
   final String text;
@@ -11,7 +12,7 @@ class FieldLabel extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         text.toUpperCase(),
-        style: const TextStyle(
+        style: RFonts.body(
           fontSize: 11,
           fontWeight: FontWeight.w500,
           color: RColors.primarySoft,
@@ -26,9 +27,9 @@ class RoomieDecor {
   static InputDecoration of(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 13, color: RColors.hint),
+      hintStyle: RFonts.body(fontSize: 13, color: RColors.hint),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: RColors.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -46,7 +47,11 @@ class RoomieDecor {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: RColors.error, width: 1.5),
       ),
-      errorStyle: const TextStyle(fontSize: 11, color: RColors.errorText),
+      errorStyle: RFonts.body(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: RColors.error,
+      ),
     );
   }
 }

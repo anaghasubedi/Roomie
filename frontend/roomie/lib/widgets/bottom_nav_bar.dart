@@ -53,8 +53,6 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    final navColor = Theme.of(context).colorScheme.surface;
-
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -79,9 +77,9 @@ class _MainNavigationState extends State<MainNavigation> {
                 bottom: 0,
                 right: 0,
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: navColor,
-                    borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                    color: RColors.surface,
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                     ),
                   ),
@@ -92,7 +90,6 @@ class _MainNavigationState extends State<MainNavigation> {
                       children: [
                         _buildMoreItem(
                           icon: Icons.star,
-                          navColor: navColor,
                           isSelected: _currentIndex == 4,
                           onTap: () => setState(() {
                             _currentIndex = 4;
@@ -101,7 +98,6 @@ class _MainNavigationState extends State<MainNavigation> {
                         ),
                         _buildMoreItem(
                           icon: Icons.celebration,
-                          navColor: navColor,
                           isSelected: _currentIndex == 5,
                           onTap: () => setState(() {
                             _currentIndex = 5;
@@ -168,7 +164,7 @@ class _MainNavigationState extends State<MainNavigation> {
                     icon,
                     size: 22,
                     color: isSelected
-                        ? Theme.of(context).colorScheme.onSurface
+                        ? RColors.primary
                         : RColors.navBarIconUnselected,
                   ),
                 ),
@@ -182,21 +178,18 @@ class _MainNavigationState extends State<MainNavigation> {
 
   Widget _buildMoreItem({
     required IconData icon,
-    required Color navColor,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
     return Material(
-      color: navColor,
+      color: RColors.surface,
       child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 28),
           child: Icon(
             icon,
-            color: isSelected
-                ? Theme.of(context).colorScheme.onSurface
-                : RColors.navBarIconUnselected,
+            color: isSelected ? RColors.primary : RColors.navBarIconUnselected,
           ),
         ),
       ),

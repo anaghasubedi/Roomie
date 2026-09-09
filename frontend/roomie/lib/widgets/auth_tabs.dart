@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class AuthTabs extends StatelessWidget {
   final String activeTab;
@@ -67,12 +68,10 @@ class _Tab extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: RFonts.emphasis(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: active
-                ? RColors.buttonText
-                : RColors.primaryMid,
+            color: active ? RColors.buttonText : RColors.primaryMid,
           ),
         ),
       ),

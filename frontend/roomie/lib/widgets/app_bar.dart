@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../screens/notification.dart';
 import '../screens/profile.dart';
+import '../themes/colors.dart';
+import '../themes/fonts.dart';
 
 class RoomieAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
@@ -21,8 +23,6 @@ class RoomieAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onSurface;
-
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -31,14 +31,14 @@ class RoomieAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(_icons[currentIndex], size: 22, color: color),
+          Icon(_icons[currentIndex], size: 22, color: RColors.primary),
           const SizedBox(width: 15),
           Text(
             'ROOMIE',
-            style: TextStyle(
+            style: RFonts.heading(
               fontSize: 22,
               fontWeight: FontWeight.w600,
-              color: color,
+              color: RColors.primary,
               letterSpacing: -0.3,
             ),
           ),
@@ -50,7 +50,7 @@ class RoomieAppBar extends StatelessWidget implements PreferredSizeWidget {
             context,
             MaterialPageRoute(builder: (_) => const NotificationScreen()),
           ),
-          icon: Icon(Icons.notifications_outlined, color: color),
+          icon: const Icon(Icons.notifications_outlined, color: RColors.textPrimary),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 8),
@@ -59,7 +59,7 @@ class RoomieAppBar extends StatelessWidget implements PreferredSizeWidget {
               context,
               MaterialPageRoute(builder: (_) => const ProfileScreen()),
             ),
-            icon: Icon(Icons.person_outline, color: color),
+            icon: const Icon(Icons.person_outline, color: RColors.textPrimary),
           ),
         ),
       ],
