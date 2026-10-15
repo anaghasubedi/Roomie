@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/home.dart';
+import '../screens/dashboard.dart';
 import '../screens/calendar.dart';
 import '../screens/bills.dart';
 import '../screens/chores.dart';
@@ -21,7 +21,7 @@ class _MainNavigationState extends State<MainNavigation> {
   bool _navVisible = true;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    const DashScreen(),
     const CalendarScreen(),
     const BillsScreen(),
     const ChoresScreen(),

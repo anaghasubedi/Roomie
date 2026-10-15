@@ -69,4 +69,31 @@ class RColors {
   static const Color scrim = Color(0x99000000); // modal/bottom-sheet backdrop
   static const Color shimmer = Color(0xFFEDE8FF); // skeleton loading base
   static const Color shimmerHighlight = Color(0xFFF7F5FF);
+
+// ── Vibe Status Colors ─────────────────────────────────
+
+// Available — Green
+static const Color vibeAvailable = Color(0xFF3DA35E);
+static const Color vibeAvailableLight = Color(0xFFE3F5E8);
+static const Color vibeAvailableText = Color(0xFF276B3E);
+
+// Busy — Amber
+static const Color vibeBusy = Color(0xFFE0A83D);
+static const Color vibeBusyLight = Color(0xFFFBF0DC);
+static const Color vibeBusyText = Color(0xFF8A5F13);
+
+// Taking Exam — Blue
+static const Color vibeTakingExam = Color(0xFF3D7BE0);
+static const Color vibeTakingExamLight = Color(0xFFE3EDFB);
+static const Color vibeTakingExamText = Color(0xFF1F4E8C);
+
+// Sick — Red
+static const Color vibeSick = Color(0xFFE24B4A);
+static const Color vibeSickLight = Color(0xFFFBE7E7);
+static const Color vibeSickText = Color(0xFFA32D2D);
+
+// On Vacation — Teal
+static const Color vibeOnVacation = Color(0xFF0D9488);
+static const Color vibeOnVacationLight = Color(0xFFCCFBF1);
+static const Color vibeOnVacationText = Color(0xFF115E59);
 }
